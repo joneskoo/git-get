@@ -47,6 +47,10 @@ func main() {
 
 	targetPath := sourceRoot
 	targetPath, err = homedir.Expand(targetPath)
+	if err != nil {
+		logger.Fatalf("git-get: failed to expand target path: %v", err)
+	}
+
 	cloneURL := expand(os.Args[1], defaultPrefix)
 	td, err := targetDir(cloneURL)
 	if err != nil {
