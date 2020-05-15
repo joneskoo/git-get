@@ -22,7 +22,8 @@ const (
 	// can be overridden with environment variable GIT_GET_ROOT.
 	defaultTargetPath = "~/src"
 
-	// defaultPrefix is prefixed to implicitly relative clone URLs
+	// defaultPrefix is prefixed to implicitly relative clone URLs,
+	// can be overriden with environment variable GIT_GET_PREFIX.
 	defaultPrefix = "git@github.com:"
 )
 
