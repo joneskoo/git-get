@@ -13,7 +13,7 @@ directory structure.
 
 ## Installing
 
-    $ go get github.com/joneskoo/git-get
+    $ go get -u github.com/joneskoo/git-get
 
 Make sure `git-get` is in your `PATH`; by default go get
 installs to `$HOME/bin`. `git` will automatically understand
