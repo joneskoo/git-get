@@ -3,6 +3,7 @@
 `git-get` is a helper that allows cloning relative URLs with a short hand
 
     $ git get joneskoo/git-get
+    $ git get git@github.com:joneskoo/git-get
 
 Regardless of working directory where `git get` is executed, this expands to:
 

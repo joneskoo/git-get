@@ -17,9 +17,16 @@ import (
 const defaultGit = "git"
 const sourceRoot = "~/src"
 
-const usage = `Usage:
+const usage = `git-get (URL|PROJECT/REPOSITORY)
 
-git-get implements a command for git that clones to
+  $ git get joneskoo/git-get                    # PROJECT/REPOSITORY
+  $ git get git@github.com:joneskoo/git-get     # URL
+
+Regardless of working directory where git get is executed, this expands to:
+
+  $ git clone git@github.com:joneskoo/git-get ~/src/github.com/joneskoo/git-get
+
+This allows easy cloning of repositories into an uniform directory structure.
 `
 
 // defaultPrefix is prefixed to implicitly relative clone URLs
@@ -27,6 +34,10 @@ var defaultPrefix = "git@github.com:"
 
 func main() {
 	logger := log.New(os.Stderr, "", 0)
+
+	if len(os.Args) != 2 {
+		logger.Fatalln(usage)
+	}
 
 	gitPath := defaultGit
 	gitPath, err := exec.LookPath(gitPath)
