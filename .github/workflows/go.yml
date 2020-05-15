@@ -31,3 +31,17 @@ jobs:
 
     - name: Test
       run: go test -v .
+
+  lint:
+    name: "Run static analysis"
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ^1.14
+    - run: "GO111MODULE=on go get honnef.co/go/tools/cmd/staticcheck"
+    - uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - run: "go vet ./..."
+    - run: "$(go env GOPATH)/bin/staticcheck -go 1.11 ./..."
