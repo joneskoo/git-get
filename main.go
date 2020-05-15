@@ -14,8 +14,17 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
-const defaultGit = "git"
-const sourceRoot = "~/src"
+const (
+	// defaultGit is the git binary name
+	defaultGit = "git"
+
+	// sourceRoot is the target prefix where we clone to,
+	// can be overridden with environment variable GIT_GET_ROOT.
+	defaultTargetPath = "~/src"
+
+	// defaultPrefix is prefixed to implicitly relative clone URLs
+	defaultPrefix = "git@github.com:"
+)
 
 const usage = `git-get (URL|PROJECT/REPOSITORY)
 
@@ -29,15 +38,13 @@ Regardless of working directory where git get is executed, this expands to:
 This allows easy cloning of repositories into an uniform directory structure.
 `
 
-// defaultPrefix is prefixed to implicitly relative clone URLs
-var defaultPrefix = "git@github.com:"
-
 func main() {
 	logger := log.New(os.Stderr, "", 0)
 
 	if len(os.Args) != 2 {
 		logger.Fatalln(usage)
 	}
+	relativeCloneURL := os.Args[1]
 
 	gitPath := defaultGit
 	gitPath, err := exec.LookPath(gitPath)
@@ -45,13 +52,20 @@ func main() {
 		logger.Fatalf("git-get: failed to find git command %q in PATH", gitPath)
 	}
 
-	targetPath := sourceRoot
+	targetPath := defaultTargetPath
+	if s := os.Getenv("GIT_GET_ROOT"); s != "" {
+		targetPath = s
+	}
 	targetPath, err = homedir.Expand(targetPath)
 	if err != nil {
 		logger.Fatalf("git-get: failed to expand target path: %v", err)
 	}
 
-	cloneURL := expand(os.Args[1], defaultPrefix)
+	prefix := defaultPrefix
+	if s := os.Getenv("GIT_GET_PREFIX"); s != "" {
+		prefix = s
+	}
+	cloneURL := expand(relativeCloneURL, prefix)
 	td, err := targetDir(cloneURL)
 	if err != nil {
 		logger.Fatalf("git-get: %v", err)
