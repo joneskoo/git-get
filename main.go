@@ -92,7 +92,7 @@ func expand(s, defaultPrefix string) string {
 	if len(parts) < 2 {
 		return s
 	}
-	return defaultPrefix + parts[0] + "/" + parts[1]
+	return defaultPrefix + parts[0] + "/" + parts[1] + ".git"
 }
 
 // targetDir resolves the cloneURL to a relative directory path.

@@ -36,12 +36,12 @@ func Test_expand(t *testing.T) {
 		{
 			"relative github path should complete",
 			args{"joneskoo/git-get", "git@github.com:"},
-			"git@github.com:joneskoo/git-get",
+			"git@github.com:joneskoo/git-get.git",
 		},
 		{
 			"relative https path should complete",
 			args{"joneskoo/git-get", "https://example.com/"},
-			"https://example.com/joneskoo/git-get",
+			"https://example.com/joneskoo/git-get.git",
 		},
 	}
 	for _, tt := range tests {
