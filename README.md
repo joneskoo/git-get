@@ -11,7 +11,7 @@ Regardless of working directory where `git get` is executed, this expands to:
 This allows easy cloning of repositories into an uniform
 directory structure.
 
-![Go](https://github.com/joneskoo/git-get/workflows/Go/badge.svg)
+[![Go](https://github.com/joneskoo/git-get/workflows/Go/badge.svg)](https://github.com/joneskoo/git-get/actions?query=workflow%3AGo)
 
 ## Installing
 
