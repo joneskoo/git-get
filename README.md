@@ -42,7 +42,8 @@ Pro tip: combine **git-get** with *CDPATH* in your shell. If you set in your `.z
 CDPATH=$HOME/src:$HOME/src/github.com:$HOME/src/github.com/joneskoo:.
 ```
 
-You can use any of these commands to `cd` into `/home/joneskoo/src/github.com/joneskoo/git-get`:
+You can use any of these commands to `cd` into `/home/joneskoo/src/github.com/joneskoo/git-get`
+from anywhere!
 
     $ cd git-get
     $ cd joneskoo/git-get
