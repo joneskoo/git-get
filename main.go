@@ -41,7 +41,6 @@ func main() {
 	if err != nil {
 		logger.Fatalf("git-get: %v", err)
 	}
-	logger.Printf("%s clone %s %s", gitPath, cloneURL, filepath.Join(targetPath, td))
 
 	// Replace current process with git
 	gitArgv := []string{"git", "clone", cloneURL, filepath.Join(targetPath, td)}
