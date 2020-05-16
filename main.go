@@ -23,7 +23,9 @@ const (
 	defaultPrefix = "git@github.com:"
 )
 
-const usage = `git-get (URL|PROJECT/REPOSITORY)
+const usage = `
+
+Usage: git-get (URL|PROJECT/REPOSITORY)
 
   $ git get joneskoo/git-get                    # PROJECT/REPOSITORY
   $ git get git@github.com:joneskoo/git-get     # URL
@@ -36,7 +38,7 @@ This allows easy cloning of repositories into an uniform directory structure.
 `
 
 func main() {
-	logger := log.New(os.Stderr, "", 0)
+	logger := log.New(os.Stderr, "git-get: ", 0)
 
 	if len(os.Args) != 2 {
 		logger.Fatalln(usage)
@@ -50,7 +52,7 @@ func main() {
 	var err error
 	targetPath, err = homedir.Expand(targetPath)
 	if err != nil {
-		logger.Fatalf("git-get: failed to expand target path: %v", err)
+		logger.Fatalf("failed to expand target path: %v", err)
 	}
 
 	prefix := defaultPrefix
@@ -60,7 +62,7 @@ func main() {
 	cloneURL := expand(relativeCloneURL, prefix)
 	td, err := targetDir(cloneURL)
 	if err != nil {
-		logger.Fatalf("git-get: %v", err)
+		logger.Fatal(err)
 	}
 
 	// Replace current process with git
@@ -73,7 +75,7 @@ func main() {
 		os.Exit(ee.ExitCode())
 	}
 	if err != nil {
-		logger.Fatalf("git-get: calling git failed: %v", err)
+		logger.Fatalf("calling git failed: %v", err)
 	}
 }
 
