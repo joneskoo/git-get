@@ -9,15 +9,11 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"syscall"
 
 	"github.com/mitchellh/go-homedir"
 )
 
 const (
-	// defaultGit is the git binary name
-	defaultGit = "git"
-
 	// sourceRoot is the target prefix where we clone to,
 	// can be overridden with environment variable GIT_GET_ROOT.
 	defaultTargetPath = "~/src"
@@ -47,16 +43,11 @@ func main() {
 	}
 	relativeCloneURL := os.Args[1]
 
-	gitPath := defaultGit
-	gitPath, err := exec.LookPath(gitPath)
-	if err != nil {
-		logger.Fatalf("git-get: failed to find git command %q in PATH", gitPath)
-	}
-
 	targetPath := defaultTargetPath
 	if s := os.Getenv("GIT_GET_ROOT"); s != "" {
 		targetPath = s
 	}
+	var err error
 	targetPath, err = homedir.Expand(targetPath)
 	if err != nil {
 		logger.Fatalf("git-get: failed to expand target path: %v", err)
@@ -73,10 +64,16 @@ func main() {
 	}
 
 	// Replace current process with git
-	gitArgv := []string{"git", "clone", cloneURL, filepath.Join(targetPath, td)}
-	err = syscall.Exec(gitPath, gitArgv, os.Environ())
+	cmd := exec.Command("git", "clone", cloneURL, filepath.Join(targetPath, td))
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	err = cmd.Run()
+	if ee, ok := err.(*exec.ExitError); ok {
+		os.Exit(ee.ExitCode())
+	}
 	if err != nil {
-		logger.Fatalf("git-get: %v", err)
+		logger.Fatalf("git-get: calling git failed: %v", err)
 	}
 }
 
